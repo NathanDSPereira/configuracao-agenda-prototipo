@@ -1,0 +1,945 @@
+<title>Configuração de Agenda</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: coluna única estreita, cartões macios, escolhas por "chips" (tipo, prioridade, reposição) em vez de listas. */
+:root {
+  --bg: #f3f5f4;
+  --surface: #ffffff;
+  --surface-2: #f6f8f7;
+  --ink: #1b2a26;
+  --ink-2: #5a6c65;
+  --ink-3: #8b9b95;
+  --line: #e9eeec;
+  --line-strong: #cfdad5;
+  --accent: #2c7a5f;
+  --accent-hover: #256650;
+  --accent-ink: #ffffff;
+  --accent-soft: #e5f2ec;
+  --danger: #b6402e;
+  --danger-soft: #fdf0ed;
+  --ok: #23724a;
+  --pu: #d4452d; --pu-soft: #fdecea; --pu-ink: #9c2e1b;
+  --pa: #cf820a; --pa-soft: #fdf2dc; --pa-ink: #85550a;
+  --pn: #3f7bc4; --pn-soft: #e7eefa; --pn-ink: #285a99;
+  --pb: #70877d; --pb-soft: #eaf0ed; --pb-ink: #4a5d55;
+  --shadow-sm: 0 1px 2px rgba(27,42,38,.06);
+  --shadow: 0 1px 2px rgba(27,42,38,.03), 0 6px 20px rgba(27,42,38,.04);
+  --shadow-btn: 0 2px 4px rgba(44,122,95,.22), 0 8px 18px rgba(44,122,95,.18);
+  --font: "Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "DM Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121a18; --surface: #19231f; --surface-2: #1d2924; --ink: #e7f0ec; --ink-2: #9fb2ab; --ink-3: #6f8780;
+    --line: #25342f; --line-strong: #34473f; --accent: #5fc9a6; --accent-hover: #7ad7b8; --accent-ink: #082219; --accent-soft: #183128;
+    --danger: #ff9a8a; --danger-soft: #33201c; --ok: #7ad69a;
+    --pu: #ff8470; --pu-soft: #3a1f1b; --pu-ink: #ffb4a6; --pa: #f2b04a; --pa-soft: #362a12; --pa-ink: #f5cc85;
+    --pn: #7fb0f0; --pn-soft: #172a42; --pn-ink: #a9c9f5; --pb: #98ada5; --pb-soft: #222f2b; --pb-ink: #b9c9c2;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.4); --shadow: 0 1px 2px rgba(0,0,0,.25), 0 6px 20px rgba(0,0,0,.2); --shadow-btn: 0 2px 4px rgba(0,0,0,.3), 0 8px 18px rgba(0,0,0,.25);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121a18; --surface: #19231f; --surface-2: #1d2924; --ink: #e7f0ec; --ink-2: #9fb2ab; --ink-3: #6f8780;
+  --line: #25342f; --line-strong: #34473f; --accent: #5fc9a6; --accent-hover: #7ad7b8; --accent-ink: #082219; --accent-soft: #183128;
+  --danger: #ff9a8a; --danger-soft: #33201c; --ok: #7ad69a;
+  --pu: #ff8470; --pu-soft: #3a1f1b; --pu-ink: #ffb4a6; --pa: #f2b04a; --pa-soft: #362a12; --pa-ink: #f5cc85;
+  --pn: #7fb0f0; --pn-soft: #172a42; --pn-ink: #a9c9f5; --pb: #98ada5; --pb-soft: #222f2b; --pb-ink: #b9c9c2;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.4); --shadow: 0 1px 2px rgba(0,0,0,.25), 0 6px 20px rgba(0,0,0,.2); --shadow-btn: 0 2px 4px rgba(0,0,0,.3), 0 8px 18px rgba(0,0,0,.25);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+.wrap {
+  max-width: 760px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 40px 72px;
+}
+h1, h2, h3, p, fieldset { margin: 0; }
+fieldset { border: 0; padding: 0; min-width: 0; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.topo { display: flex; flex-wrap: wrap; gap: 14px 24px; align-items: flex-start; justify-content: space-between; }
+.selo { display: inline-block; font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent);
+  background: var(--accent-soft); border-radius: 999px; padding: 3px 10px; margin-bottom: 12px; }
+h1 { font-size: 32px; line-height: 1.12; font-weight: 700; letter-spacing: -.02em; text-wrap: balance; }
+.sub { color: var(--ink-2); margin-top: 10px; max-width: 50ch; }
+
+.abas { display: inline-flex; background: var(--surface-2); padding: 4px; border-radius: 999px; margin-top: 28px; border: 1px solid var(--line); }
+.abas label { cursor: pointer; position: relative; }
+.abas input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.abas span { display: block; padding: 9px 24px; border-radius: 999px; font-weight: 600; color: var(--ink-2); transition: background .15s, color .15s; }
+.abas input:checked + span { background: var(--surface); color: var(--accent); box-shadow: var(--shadow-sm); }
+.abas input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; box-shadow: var(--shadow); padding: 28px; margin-top: 20px; }
+.card-tit { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-weight: 700; font-size: 13px; display: grid; place-items: center; flex: none; }
+.card-tit h2 { font-size: 18px; font-weight: 650; }
+.dica { color: var(--ink-2); font-size: 14px; margin: -8px 0 4px; }
+
+.grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px 16px; }
+.cheia { grid-column: 1 / -1; }
+.campo { min-width: 0; }
+.campo > label, legend.rot { display: block; font-size: 13px; font-weight: 600; margin-bottom: 7px; padding: 0; color: var(--ink); }
+.req { color: var(--danger); }
+.opt { color: var(--ink-3); font-weight: 400; }
+.ajuda { color: var(--ink-2); font-size: 12.5px; margin-top: 6px; }
+input[type=text], input[type=email], input[type=date], input[type=time], input[type=number], textarea {
+  width: 100%; font: inherit; font-size: 16px; color: var(--ink); background: var(--surface-2);
+  border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; min-height: 48px; transition: border-color .15s, background .15s, box-shadow .15s;
+}
+textarea { resize: vertical; min-height: 84px; line-height: 1.5; }
+input::placeholder, textarea::placeholder { color: var(--ink-3); }
+input:hover, textarea:hover { border-color: var(--line-strong); }
+input:focus, textarea:focus { outline: none; border-color: var(--accent); background: var(--surface); box-shadow: 0 0 0 4px var(--accent-soft); }
+[aria-invalid="true"] { border-color: var(--danger) !important; background: var(--danger-soft) !important; }
+.err { color: var(--danger); font-size: 13px; margin-top: 6px; }
+.err:empty { display: none; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { position: relative; }
+.chip input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.chip span { display: inline-flex; align-items: center; gap: 8px; padding: 10px 17px; min-height: 42px; border-radius: 999px; border: 1px solid var(--line-strong);
+  background: var(--surface); font-weight: 500; font-size: 14px; color: var(--ink-2); transition: background .15s, border-color .15s, color .15s; }
+.chip:hover span { border-color: var(--ink-3); }
+.chip input:checked + span { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+.chip input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+.chip-p span::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--pc); }
+.chip-p input:checked + span { background: var(--pcs); border-color: var(--pc); color: var(--pci); }
+.p-urgente { --pc: var(--pu); --pcs: var(--pu-soft); --pci: var(--pu-ink); }
+.p-alta { --pc: var(--pa); --pcs: var(--pa-soft); --pci: var(--pa-ink); }
+.p-normal { --pc: var(--pn); --pcs: var(--pn-soft); --pci: var(--pn-ink); }
+.p-baixa { --pc: var(--pb); --pcs: var(--pb-soft); --pci: var(--pb-ink); }
+.invalido .chip span { border-color: var(--danger); }
+
+.item { border: 1px solid var(--line); border-radius: 18px; padding: 22px; margin-top: 16px; background: var(--surface); }
+.item-cab { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+.item-cab h3 { font-size: 15px; font-weight: 650; }
+.item-cab h3 small { font-weight: 500; color: var(--ink-2); margin-left: 8px; }
+.item .grade { gap: 18px 16px; }
+
+.btn { border: 1.5px solid var(--line-strong); background: var(--surface); border-radius: 14px; padding: 11px 20px; cursor: pointer; font-weight: 650; min-height: 48px;
+  transition: background .15s, border-color .15s, transform .1s, box-shadow .15s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; color: inherit; }
+.btn:hover { border-color: var(--ink-3); }
+.btn:active { transform: translateY(1px); }
+.btn[disabled] { opacity: .5; cursor: not-allowed; box-shadow: none; }
+.btn-sm { min-height: 38px; padding: 6px 14px; font-size: 13.5px; border-radius: 11px; }
+.btn-primario { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); box-shadow: var(--shadow-btn); font-size: 16px; }
+.btn-primario:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+.btn-suave { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+.btn-suave:hover { background: var(--accent); color: var(--accent-ink); }
+.btn-ghost { border-color: var(--line-strong); background: var(--surface); color: var(--ink-2); }
+.btn-ghost:hover { background: var(--surface-2); color: var(--ink); }
+.btn-link { border: 0; background: none; color: var(--danger); text-decoration: underline; padding: 0; cursor: pointer; text-align: left; font-size: 14px; }
+.add { width: 100%; margin-top: 16px; border: 2px dashed var(--accent); color: var(--accent); background: var(--accent-soft); }
+.add:hover { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.add[disabled]:hover { background: var(--accent-soft); color: var(--accent); }
+
+.aceite { display: flex; gap: 14px; align-items: flex-start; }
+.aceite input { width: 22px; height: 22px; margin-top: 1px; flex: none; accent-color: var(--accent); }
+.aceite label { font-size: 14.5px; }
+
+.resumo-erros { margin-top: 20px; background: var(--danger-soft); border: 1px solid var(--danger); border-radius: 18px; padding: 18px 22px; }
+.resumo-erros h2 { font-size: 15px; color: var(--danger); font-weight: 650; }
+.resumo-erros ul { margin: 8px 0 0; padding-left: 20px; }
+.resumo-erros li { margin: 3px 0; }
+.resumo-erros .grupo { font-weight: 650; }
+
+.barra { display: flex; flex-wrap: wrap; gap: 14px 20px; align-items: center; justify-content: space-between; margin-top: 24px; }
+.contador { font-size: 14px; color: var(--ink-2); }
+.contador.ok { color: var(--ok); font-weight: 600; }
+.contador b { font-variant-numeric: tabular-nums; }
+.barra .btn-primario { padding-inline: 32px; min-height: 54px; }
+.acoes .btn-primario { min-height: 54px; padding-inline: 28px; }
+
+.resultado { margin-top: 28px; padding: 0; overflow: hidden; border-color: var(--accent); }
+.resultado > header { padding: 20px 28px; background: var(--accent-soft); }
+.resultado > header h2 { font-size: 19px; font-weight: 650; }
+.resultado > header p { font-family: var(--mono); font-size: 13px; color: var(--ink-2); margin-top: 3px; overflow-wrap: anywhere; }
+.resultado .conteudo { padding: 24px 28px 28px; display: grid; gap: 20px; }
+.acoes { display: flex; flex-wrap: wrap; gap: 10px; }
+.email { border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: var(--surface); }
+.email .linha { display: grid; grid-template-columns: 70px 1fr auto; gap: 12px; align-items: center; padding: 10px 16px; border-bottom: 1px solid var(--line); }
+.email .linha .rot { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-3); }
+.email .linha .val { font-family: var(--mono); font-size: 13px; overflow-wrap: anywhere; min-width: 0; }
+.email textarea { border: 0; border-radius: 0; font-family: var(--mono); font-size: 13px; line-height: 1.6; min-height: 340px; background: var(--surface); }
+.email textarea:focus { box-shadow: none; }
+.nota { font-size: 13.5px; color: var(--ink-2); }
+.gstatus { border-radius: 14px; padding: 14px 16px; background: var(--surface-2); font-size: 14px; display: grid; gap: 10px; }
+.gstatus[hidden] { display: none; }
+.gstatus.erro { background: var(--danger-soft); color: var(--danger); }
+.gstatus.ok { background: var(--accent-soft); }
+details summary { cursor: pointer; font-weight: 600; }
+pre { margin: 12px 0 0; padding: 14px; background: var(--surface-2); border-radius: 12px; overflow-x: auto; font-family: var(--mono); font-size: 12.5px; }
+.rodape { margin-top: 36px; font-size: 12.5px; color: var(--ink-3); text-align: center; }
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(20px + env(safe-area-inset-bottom, 0px)); background: var(--ink); color: var(--bg);
+  padding: 11px 18px; border-radius: 999px; font-size: 14px; font-weight: 500; max-width: calc(100vw - 32px); z-index: 10; box-shadow: var(--shadow); }
+.toast:empty { display: none; }
+@media (max-width: 820px) {
+  .wrap { padding-block: 28px 56px; }
+}
+@media (max-width: 560px) {
+  .wrap { padding-block: 20px 40px; }
+  .topo { flex-direction: column; align-items: stretch; }
+  .topo .btn { width: 100%; }
+  .abas { display: flex; width: 100%; margin-top: 22px; }
+  .abas label { flex: 1; }
+  .abas span { text-align: center; padding-inline: 8px; }
+  .grade { grid-template-columns: 1fr; }
+  .card-tit h2 { font-size: 17px; }
+  .item-cab { flex-wrap: wrap; }
+  .chips { gap: 8px; }
+  .barra { flex-direction: column-reverse; align-items: stretch; text-align: center; }
+  .barra .btn-primario { width: 100%; }
+  .acoes { flex-direction: column; }
+  .acoes .btn { width: 100%; }
+  .gstatus .btn { width: 100%; }
+  .email textarea { min-height: 280px; }
+  .toast { width: calc(100vw - 32px); text-align: center; border-radius: 16px; }
+  .card { padding: 20px; border-radius: 20px; }
+  .item { padding: 18px; }
+  .resultado > header, .resultado .conteudo { padding-inline: 20px; }
+  h1 { font-size: 27px; }
+  .email .linha { grid-template-columns: 1fr auto; }
+  .email .linha .rot { grid-column: 1 / -1; }
+}
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+</style>
+
+<div class="wrap">
+  <header class="topo">
+    <div>
+      <span class="selo">Protótipo</span>
+      <h1>Configuração de agenda</h1>
+      <p class="sub">Preencha os campos obrigatórios. Ao finalizar, o PDF e o texto do e-mail são gerados para você.</p>
+    </div>
+    <button type="button" class="btn btn-ghost btn-sm" id="btn-exemplo">Carregar exemplo fictício</button>
+  </header>
+
+  <form id="form" novalidate>
+    <fieldset class="abas" aria-label="Modelo do formulário">
+      <label><input type="radio" name="modelo" value="CASU" checked><span>CASU</span></label>
+      <label><input type="radio" name="modelo" value="IMAGINAMENTE"><span>Imaginamente</span></label>
+    </fieldset>
+
+    <section class="card" aria-labelledby="t1">
+      <div class="card-tit"><span class="num" aria-hidden="true">1</span><h2 id="t1">Dados da solicitação</h2></div>
+      <div class="grade">
+        <div class="campo">
+          <label for="h-solicitante">Solicitante (profissional) <span class="req" aria-hidden="true">*</span></label>
+          <input type="text" id="h-solicitante" autocomplete="name" aria-describedby="e-h-solicitante" aria-required="true">
+          <p class="err" id="e-h-solicitante"></p>
+        </div>
+        <div class="campo">
+          <label for="h-unidade">Unidade de atendimento <span class="req" aria-hidden="true">*</span></label>
+          <input type="text" id="h-unidade" aria-describedby="e-h-unidade" aria-required="true">
+          <p class="err" id="e-h-unidade"></p>
+        </div>
+        <div class="campo cheia">
+          <label for="h-email">E-mail do solicitante <span class="req" aria-hidden="true">*</span></label>
+          <input type="email" id="h-email" autocomplete="email" aria-describedby="e-h-email" aria-required="true">
+          <p class="err" id="e-h-email"></p>
+        </div>
+        <div class="campo cheia">
+          <label for="h-resumo">Resumo <span class="req" aria-hidden="true">*</span></label>
+          <input type="text" id="h-resumo" maxlength="120" aria-describedby="e-h-resumo" aria-required="true">
+          <p class="err" id="e-h-resumo"></p>
+          <p class="ajuda">Data e hora da solicitação são registradas automaticamente ao finalizar.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="t2">
+      <div class="card-tit"><span class="num" aria-hidden="true">2</span><h2 id="t2">Configurações</h2></div>
+      <p class="dica">Cada configuração tem um único tipo e sua própria prioridade. Para mais de uma alteração, adicione outra.</p>
+      <div id="itens"></div>
+      <button type="button" class="btn add" id="btn-add"></button>
+    </section>
+
+    <section class="card" aria-labelledby="t3">
+      <div class="card-tit"><span class="num" aria-hidden="true">3</span><h2 id="t3">Aceite</h2></div>
+      <div class="aceite">
+        <input type="checkbox" id="aceite" aria-describedby="e-aceite">
+        <label for="aceite">Declaro que as informações acima são verdadeiras e estou ciente de que este documento é classificado conforme a Lei nº 13.709/2018 (LGPD). <span class="req" aria-hidden="true">*</span></label>
+      </div>
+      <p class="err" id="e-aceite" style="margin-left:36px"></p>
+    </section>
+
+    <div class="resumo-erros" id="resumo-erros" tabindex="-1" hidden></div>
+
+    <div class="barra">
+      <p class="contador" id="contador" aria-live="polite"></p>
+      <button type="submit" class="btn btn-primario" id="btn-gerar">Finalizar e gerar documento</button>
+    </div>
+  </form>
+
+  <section class="card resultado" id="resultado" tabindex="-1" hidden aria-labelledby="t-res"></section>
+
+  <p class="rodape">Protótipo de demonstração. Os dados permanecem neste navegador. Nomes e e-mails de exemplo são fictícios.</p>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  /* ------------------------------ Configuração ------------------------------ */
+  // Quem hospeda a página pode definir window.CONFIGURACAO_AGENDA antes deste script, sem editar o código.
+  const CONFIG = Object.assign({
+    googleClientId: "",     // ID do cliente OAuth (tipo "Aplicativo da Web"). Vazio = envio pelo Gmail desligado.
+    dominioPermitido: "",   // opcional: domínio do Google Workspace, usado como dica no login
+    logoDataUrl: ""         // opcional: logo em PNG/JPEG (data URL) para o cabeçalho do PDF
+  }, window.CONFIGURACAO_AGENDA || {});
+
+  const MAX_ITENS = 10, SLOT_MIN = 5, SLOT_MAX = 180, DESC_MIN = 15, VERSAO = "v2";
+  const PRIORIDADES = [
+    { v: "Urgente", cls: "urgente", cu: 1, cor: [0.80, 0.25, 0.15] },
+    { v: "Alta",    cls: "alta",    cu: 2, cor: [0.70, 0.43, 0.00] },
+    { v: "Normal",  cls: "normal",  cu: 3, cor: [0.20, 0.42, 0.70] },
+    { v: "Baixa",   cls: "baixa",   cu: 4, cor: [0.35, 0.43, 0.40] }
+  ];
+  const prio = v => PRIORIDADES.find(p => p.v === v);
+
+  // Tipos e colunas conforme os formulários oficiais. Em cada tipo: [campo, obrigatório (1/0)].
+  const MODELOS = {
+    CASU: {
+      rotulo: "CASU", titulo: "Configuração de Agenda - CASU", destino: "agenda.casu@instituicao.example", codigo: "", revisao: "",
+      detalheRot: "Descreva a alteração permanente", detalheLinha: "Descrição da alteração permanente",
+      tipos: {
+        "Antecipação": [],
+        "Bloqueio": [["bloqueio_inicio", 1], ["bloqueio_fim", 1], ["reposicao", 1], ["data_reposicao", 1]],
+        "Ajustes tempo slot": [["novo_slot_min", 1]],
+        "Alterações permanentes": [["detalhe", 1]]
+      }
+    },
+    IMAGINAMENTE: {
+      rotulo: "Imaginamente", titulo: "Configuração de Agenda - Imaginamente", destino: "agenda.imaginamente@instituicao.example", codigo: "", revisao: "",
+      detalheRot: "Descreva o bloqueio ou a alteração permanente", detalheLinha: "Descrição do bloqueio ou alteração permanente",
+      tipos: {
+        "Trocas": [["paciente", 1], ["horario_anterior", 1], ["horario_atual", 1]],
+        "Ajustes": [["paciente", 0], ["horario_anterior", 1], ["horario_atual", 1]],
+        "Bloqueio": [["detalhe", 1]],
+        "Alterações permanentes": [["detalhe", 1]]
+      }
+    }
+  };
+  const CAMPOS = {
+    descricao:        { rot: "Descrição", t: "area", rows: 2, max: 300, cheia: 1 },
+    data_regencia:    { rot: "Data de regência da alteração", t: "date" },
+    bloqueio_inicio:  { rot: "Bloqueio: início", t: "date" },
+    bloqueio_fim:     { rot: "Bloqueio: fim", t: "date" },
+    reposicao:        { rot: "Reposição", t: "chips", ops: ["Sem reposição", "Com reposição"] },
+    data_reposicao:   { rot: "Data de reposição", t: "date" },
+    novo_slot_min:    { rot: "Alteração de tempo de atendimento (minutos)", t: "num" },
+    paciente:         { rot: "Dados do paciente", t: "text", max: 160, cheia: 1, ajuda: "Informe apenas o necessário para identificar o paciente." },
+    horario_anterior: { rot: "Horário anterior", t: "time" },
+    horario_atual:    { rot: "Horário atual", t: "time" },
+    detalhe:          { rot: null, t: "area", rows: 3, max: 600, cheia: 1 },
+    observacoes:      { rot: "Observações", t: "area", rows: 2, max: 400, cheia: 1 }
+  };
+  const MSG_OBRIG = {
+    bloqueio_inicio: "Informe o início do bloqueio.", bloqueio_fim: "Informe o fim do bloqueio.", reposicao: "Informe se haverá reposição.",
+    data_reposicao: "Informe a data de reposição.", novo_slot_min: "Informe o novo tempo de atendimento, em minutos.",
+    paciente: "Informe os dados do paciente.", horario_anterior: "Informe o horário anterior.", horario_atual: "Informe o horário atual."
+  };
+  const LGPD = "Este documento é classificado conforme Lei nº 13.709, de 14 de agosto de 2018, que dispõe sobre a proteção de dados pessoais e altera a Lei nº 12.965, de 23 de abril de 2014 (Marco Civil).";
+
+  /* -------------------------------- Utilidades ------------------------------ */
+  const $ = (s, r) => (r || document).querySelector(s);
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const p2 = n => String(n).padStart(2, "0");
+  const isoDe = d => d.getFullYear() + "-" + p2(d.getMonth() + 1) + "-" + p2(d.getDate());
+  const hojeISO = () => isoDe(new Date());
+  const br = iso => iso ? iso.split("-").reverse().join("/") : "";
+  const dataBR = d => p2(d.getDate()) + "/" + p2(d.getMonth() + 1) + "/" + d.getFullYear();
+  const dataHoraBR = d => dataBR(d) + " " + p2(d.getHours()) + ":" + p2(d.getMinutes());
+  const reduzMov = () => window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const modeloAtual = () => MODELOS[state.modelo];
+
+  /* ---------------------------------- Estado -------------------------------- */
+  let seq = 0;
+  const novoItem = () => ({ id: "i" + (++seq), tipo: "", prioridade: "", descricao: "", data_regencia: "", bloqueio_inicio: "", bloqueio_fim: "",
+    reposicao: "", data_reposicao: "", novo_slot_min: "", paciente: "", horario_anterior: "", horario_atual: "", detalhe: "", observacoes: "" });
+  const state = { modelo: "CASU", h: { solicitante: "", unidade: "", email: "", resumo: "" }, itens: [novoItem()],
+    aceite: false, tentou: false, tocados: new Set(), resultado: null };
+
+  const camposDoTipo = it => !it.tipo ? [] : modeloAtual().tipos[it.tipo].filter(x => x[0] !== "data_reposicao" || it.reposicao === "Com reposição");
+  const rotuloCampo = c => c === "detalhe" ? modeloAtual().detalheRot : CAMPOS[c].rot;
+  function obrigatorio(it, c) {
+    if (["tipo", "prioridade", "descricao", "data_regencia"].includes(c)) return true;
+    if (c === "observacoes") return false;
+    const def = (modeloAtual().tipos[it.tipo] || []).find(x => x[0] === c);
+    return !!(def && def[1]);
+  }
+
+  /* -------------------------------- Validação ------------------------------- */
+  function validarItem(it) {
+    const e = [], add = (campo, msg) => e.push({ item: it.id, campo, msg });
+    if (!it.tipo) add("tipo", "Selecione o tipo da solicitação.");
+    if (!it.prioridade) add("prioridade", "Selecione a prioridade.");
+    if (!it.tipo) return e;
+    if (!it.descricao.trim()) add("descricao", "Descreva o que precisa ser configurado.");
+    if (!it.data_regencia) add("data_regencia", "Informe a data de regência da alteração.");
+    else if (it.data_regencia < hojeISO()) add("data_regencia", "A data de regência não pode ser anterior a hoje.");
+
+    const nomes = camposDoTipo(it).map(x => x[0]);
+    camposDoTipo(it).forEach(([c, req]) => {
+      if (c === "detalhe") return;
+      if (req && !String(it[c]).trim()) add(c, MSG_OBRIG[c]);
+    });
+    if (nomes.includes("detalhe") && it.detalhe.trim().length < DESC_MIN)
+      add("detalhe", modeloAtual().detalheRot + " (mínimo de " + DESC_MIN + " caracteres).");
+    if (it.bloqueio_inicio && it.bloqueio_fim && it.bloqueio_fim < it.bloqueio_inicio) add("bloqueio_fim", "O fim do bloqueio não pode ser anterior ao início.");
+    if (it.reposicao === "Com reposição" && it.data_reposicao && it.bloqueio_fim && it.data_reposicao < it.bloqueio_fim)
+      add("data_reposicao", "A reposição não pode ser anterior ao fim do bloqueio.");
+    if (nomes.includes("novo_slot_min") && it.novo_slot_min.trim() && (!/^\d+$/.test(it.novo_slot_min.trim()) || +it.novo_slot_min < SLOT_MIN || +it.novo_slot_min > SLOT_MAX))
+      add("novo_slot_min", "Informe um valor entre " + SLOT_MIN + " e " + SLOT_MAX + " minutos.");
+    if (it.horario_anterior && it.horario_atual && it.horario_anterior === it.horario_atual) add("horario_atual", "O horário atual deve ser diferente do anterior.");
+    return e;
+  }
+  function chaveItem(it) {
+    const n = camposDoTipo(it).map(x => x[0]);
+    return [it.tipo, it.data_regencia, n.includes("bloqueio_inicio") ? it.bloqueio_inicio + it.bloqueio_fim : "", n.includes("novo_slot_min") ? it.novo_slot_min.trim() : "",
+      n.includes("paciente") ? it.paciente.trim().toLowerCase() : "", n.includes("horario_atual") ? it.horario_anterior + ">" + it.horario_atual : "",
+      n.includes("detalhe") ? it.detalhe.trim().toLowerCase() : ""].join("|");
+  }
+  function validar() {
+    const e = [], h = state.h;
+    if (h.solicitante.trim().split(/\s+/).filter(Boolean).length < 2) e.push({ item: "h", campo: "solicitante", msg: "Informe o nome completo do profissional." });
+    if (!h.unidade.trim()) e.push({ item: "h", campo: "unidade", msg: "Informe a unidade de atendimento." });
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(h.email.trim())) e.push({ item: "h", campo: "email", msg: "Informe um e-mail válido." });
+    if (!h.resumo.trim()) e.push({ item: "h", campo: "resumo", msg: "Informe o resumo da solicitação." });
+    const vistos = {};
+    state.itens.forEach((it, i) => {
+      const ei = validarItem(it);
+      e.push.apply(e, ei);
+      if (!ei.length) {
+        const k = chaveItem(it);
+        if (vistos[k] != null) e.push({ item: it.id, campo: "tipo", msg: "Esta configuração repete a configuração " + (vistos[k] + 1) + " deste formulário." });
+        else vistos[k] = i;
+      }
+    });
+    if (!state.aceite) e.push({ item: "a", campo: "aceite", msg: "Marque o aceite para finalizar." });
+    return e;
+  }
+  const idCampo = e => e.item === "h" ? "h-" + e.campo : e.item === "a" ? "aceite" : "f-" + e.item + "-" + e.campo;
+
+  /* ------------------------------ Renderização ------------------------------ */
+  function chipsHTML(it, c, ops, pri) {
+    return '<div class="chips">' + ops.map((o, k) => {
+      const v = pri ? o.v : o, id = "f-" + it.id + "-" + c + (k ? "-" + k : "");
+      return '<label class="chip' + (pri ? " chip-p p-" + o.cls : "") + '"><input type="radio" name="n-' + it.id + "-" + c + '" id="' + id + '" value="' + esc(v) +
+        '" data-item="' + it.id + '" data-campo="' + c + '"' + (it[c] === v ? " checked" : "") + '><span>' + esc(v) + '</span></label>';
+    }).join("") + '</div>';
+  }
+  function campoHTML(it, c) {
+    const meta = CAMPOS[c], id = "f-" + it.id + "-" + c, v = it[c], req = obrigatorio(it, c);
+    const marca = req ? ' <span class="req" aria-hidden="true">*</span>' : ' <span class="opt">(opcional)</span>';
+    const rot = c === "tipo" ? "Tipo" : c === "prioridade" ? "Prioridade / urgência" : rotuloCampo(c);
+    const desc = ' aria-describedby="e-' + id + '"', data = ' data-item="' + it.id + '" data-campo="' + c + '"';
+    const erro = '<p class="err" id="e-' + id + '"></p>';
+    if (c === "tipo" || c === "prioridade" || meta.t === "chips") {
+      const ops = c === "tipo" ? Object.keys(modeloAtual().tipos) : c === "prioridade" ? PRIORIDADES : meta.ops;
+      return '<fieldset class="campo cheia grupo" data-field="' + id + '"' + desc + '><legend class="rot">' + rot + marca + '</legend>' + chipsHTML(it, c, ops, c === "prioridade") + erro + '</fieldset>';
+    }
+    let ctrl;
+    if (meta.t === "area") ctrl = '<textarea id="' + id + '"' + data + desc + ' maxlength="' + meta.max + '" rows="' + meta.rows + '"' + (req ? ' aria-required="true"' : "") + '>' + esc(v) + '</textarea>';
+    else if (meta.t === "text") ctrl = '<input type="text" id="' + id + '"' + data + desc + ' maxlength="' + meta.max + '" value="' + esc(v) + '"' + (req ? ' aria-required="true"' : "") + '>';
+    else if (meta.t === "num") ctrl = '<input type="number" inputmode="numeric" id="' + id + '"' + data + desc + ' min="' + SLOT_MIN + '" max="' + SLOT_MAX + '" step="1" value="' + esc(v) + '" aria-required="true">';
+    else if (meta.t === "time") ctrl = '<input type="time" id="' + id + '"' + data + desc + ' value="' + esc(v) + '"' + (req ? ' aria-required="true"' : "") + '>';
+    else {
+      const min = c === "data_regencia" ? hojeISO() : c === "data_reposicao" ? (it.bloqueio_fim || hojeISO()) : "";
+      ctrl = '<input type="date" id="' + id + '"' + data + desc + (min ? ' min="' + min + '"' : "") + ' value="' + esc(v) + '" aria-required="true">';
+    }
+    return '<div class="campo' + (meta.cheia ? " cheia" : "") + '"><label for="' + id + '">' + rot + marca + '</label>' + ctrl +
+      (meta.ajuda ? '<p class="ajuda">' + meta.ajuda + '</p>' : "") + erro + '</div>';
+  }
+  function itemHTML(it, i) {
+    const campos = ["tipo", "prioridade"];
+    if (it.tipo) campos.push("descricao", "data_regencia", ...camposDoTipo(it).map(x => x[0]), "observacoes");
+    return '<article class="item" data-id="' + it.id + '" aria-label="Configuração ' + (i + 1) + '">' +
+      '<div class="item-cab"><h3>Configuração ' + (i + 1) + (it.tipo ? '<small>' + esc(it.tipo) + '</small>' : "") + '</h3>' +
+      (state.itens.length > 1 ? '<button type="button" class="btn btn-ghost btn-sm" data-remover="' + it.id + '">Remover</button>' : "") + '</div>' +
+      '<div class="grade">' + campos.map(c => campoHTML(it, c)).join("") + '</div></article>';
+  }
+  function renderItens(focoId) {
+    $("#itens").innerHTML = state.itens.map(itemHTML).join("");
+    const b = $("#btn-add");
+    b.textContent = "+ Adicionar outra configuração (" + state.itens.length + " de " + MAX_ITENS + ")";
+    b.disabled = state.itens.length >= MAX_ITENS;
+    if (focoId) { const el = document.getElementById(focoId); if (el) el.focus(); }
+    atualizar();
+  }
+  function atualizar() {
+    const erros = validar(), mapa = {};
+    erros.forEach(e => { mapa[idCampo(e)] = e.msg; });
+    const mostra = id => (state.tentou || state.tocados.has(id)) && mapa[id];
+    document.querySelectorAll(".err").forEach(p => {
+      const id = p.id.slice(2), m = mostra(id);
+      p.textContent = m || "";
+      const ctrl = document.getElementById(id);
+      if (ctrl && ctrl.tagName !== "FIELDSET") { if (m) ctrl.setAttribute("aria-invalid", "true"); else ctrl.removeAttribute("aria-invalid"); }
+    });
+    document.querySelectorAll(".grupo").forEach(g => g.classList.toggle("invalido", !!mostra(g.dataset.field)));
+    const c = $("#contador");
+    if (erros.length) { c.className = "contador"; c.innerHTML = '<b>' + erros.length + '</b> ' + (erros.length === 1 ? "pendência" : "pendências") + ' para finalizar'; }
+    else { c.className = "contador ok"; c.textContent = "Tudo preenchido. Pronto para finalizar."; }
+    renderResumo(erros);
+    return erros;
+  }
+  function renderResumo(erros) {
+    const box = $("#resumo-erros");
+    if (!(state.tentou && erros.length)) { box.hidden = true; box.innerHTML = ""; return; }
+    const grupos = [];
+    erros.forEach(e => {
+      const nome = e.item === "h" ? "Dados da solicitação" : e.item === "a" ? "Aceite" : "Configuração " + (state.itens.findIndex(i => i.id === e.item) + 1);
+      let g = grupos.find(x => x.nome === nome);
+      if (!g) { g = { nome, itens: [] }; grupos.push(g); }
+      g.itens.push(e);
+    });
+    box.innerHTML = '<h2>O formulário não pode ser finalizado: ' + erros.length + (erros.length === 1 ? " pendência" : " pendências") + '</h2><ul>' +
+      grupos.map(g => '<li><span class="grupo">' + g.nome + '</span><ul>' +
+        g.itens.map(e => '<li><button type="button" class="btn-link" data-foco="' + idCampo(e) + '">' + esc(e.msg) + '</button></li>').join("") + '</ul></li>').join("") + '</ul>';
+    box.hidden = false;
+  }
+
+  /* ------------------------------ Geração de saída -------------------------- */
+  function montarDados() {
+    const agora = new Date(), m = modeloAtual();
+    const rand = Math.random().toString(36).slice(2, 6).toUpperCase();
+    const protocolo = state.modelo + "-" + agora.getFullYear() + p2(agora.getMonth() + 1) + p2(agora.getDate()) + "-" + p2(agora.getHours()) + p2(agora.getMinutes()) + "-" + rand;
+    return {
+      protocolo, modelo: state.modelo, versao_modelo: VERSAO, emitido_em: agora.toISOString(), emitido_em_br: dataHoraBR(agora), data_br: dataBR(agora),
+      solicitante: { nome: state.h.solicitante.trim(), email: state.h.email.trim(), unidade: state.h.unidade.trim() },
+      resumo: state.h.resumo.trim(),
+      itens: state.itens.map((it, i) => {
+        const o = { n: i + 1, tipo: it.tipo, prioridade: it.prioridade, prioridade_clickup: prio(it.prioridade).cu, descricao: it.descricao.trim(), data_regencia: it.data_regencia };
+        camposDoTipo(it).forEach(([c]) => { o[c] = c === "novo_slot_min" ? Number(it[c]) : (String(it[c]).trim() || null); });
+        if (o.reposicao && o.reposicao !== "Com reposição") o.data_reposicao = null;
+        o.observacoes = it.observacoes.trim() || null;
+        return o;
+      }),
+      aceite: { aceito: true, em: agora.toISOString() }
+    };
+  }
+  const maiorPrioridade = d => d.itens.map(i => prio(i.prioridade)).sort((a, b) => a.cu - b.cu)[0];
+  function pares(it, m) {
+    const p = [["Prioridade", it.prioridade], ["Descrição", it.descricao], ["Data de regência da alteração", br(it.data_regencia)]];
+    if (it.bloqueio_inicio) p.push(["Bloqueio", br(it.bloqueio_inicio) + " a " + br(it.bloqueio_fim)]);
+    if (it.reposicao) p.push(["Reposição", it.reposicao === "Com reposição" ? "Com reposição em " + br(it.data_reposicao) : "Sem reposição"]);
+    if (it.novo_slot_min != null) p.push(["Alteração de tempo de atendimento", it.novo_slot_min + " minutos"]);
+    if (it.paciente) p.push(["Dados do paciente", it.paciente]);
+    if (it.horario_anterior) p.push(["Horário anterior", it.horario_anterior]);
+    if (it.horario_atual) p.push(["Horário atual", it.horario_atual]);
+    if (it.detalhe) p.push([m.detalheLinha, it.detalhe]);
+    if (it.observacoes) p.push(["Observações", it.observacoes]);
+    return p;
+  }
+  function montarEmail(d) {
+    const m = MODELOS[d.modelo], n = d.itens.length, mp = maiorPrioridade(d);
+    const tag = mp.cu <= 2 ? " [" + mp.v + "]" : "";
+    const assunto = "[" + m.rotulo + "]" + tag + " " + d.resumo + " - " + d.solicitante.nome + " - " + (n === 1 ? "1 configuração" : n + " configurações") + " - " + d.protocolo;
+    const L = ["Prezada equipe de Agenda,", "", "Segue solicitação de configuração de agenda (" + m.rotulo + "). O formulário em PDF está em anexo.", ""];
+    L.push("Protocolo: " + d.protocolo, "Resumo: " + d.resumo, "Prioridade mais alta: " + mp.v, "Solicitante: " + d.solicitante.nome,
+      "Unidade: " + d.solicitante.unidade, "E-mail: " + d.solicitante.email, "Enviado em: " + d.emitido_em_br, "Total de configurações: " + n, "");
+    d.itens.forEach(it => {
+      L.push("CONFIGURAÇÃO " + it.n + " - " + it.tipo.toUpperCase() + " (Prioridade: " + it.prioridade + ")");
+      pares(it, m).slice(1).forEach(p => L.push("- " + p[0] + ": " + p[1]));
+      L.push("");
+    });
+    L.push("Aceite eletrônico: o solicitante declarou que as informações são verdadeiras em " + d.emitido_em_br + ".", "");
+    L.push("Atenciosamente,", d.solicitante.nome, "", "---", LGPD);
+    return { para: m.destino, cc: d.solicitante.email, assunto, corpo: L.join("\n") };
+  }
+
+  // Fontes padrão do PDF só codificam WinAnsi: o que não existe vira "?" para nunca falhar com texto digitado.
+  const limpa = s => String(s == null ? "" : s).replace(/\r/g, "").replace(/\t/g, " ")
+    .replace(/[^\n\x20-\x7E\u00A0-\u00FF\u2013\u2014\u2018\u2019\u201C\u201D\u2022\u2026\u20AC\u2122]/gu, "?");
+  function quebra(txt, fonte, tam, larg) {
+    const saida = [];
+    limpa(txt).split("\n").forEach(par => {
+      const palavras = par.split(/\s+/).filter(Boolean);
+      if (!palavras.length) { saida.push(""); return; }
+      let atual = "";
+      palavras.forEach(w => {
+        const tent = atual ? atual + " " + w : w;
+        if (fonte.widthOfTextAtSize(tent, tam) <= larg) { atual = tent; return; }
+        if (atual) saida.push(atual);
+        if (fonte.widthOfTextAtSize(w, tam) <= larg) { atual = w; return; }
+        let pedaco = "";
+        for (const ch of w) { if (fonte.widthOfTextAtSize(pedaco + ch, tam) > larg) { saida.push(pedaco); pedaco = ch; } else pedaco += ch; }
+        atual = pedaco;
+      });
+      saida.push(atual);
+    });
+    return saida;
+  }
+
+  async function gerarPDF(d) {
+    if (!window.PDFLib) throw new Error("pdf-lib não carregou");
+    const { PDFDocument, StandardFonts, rgb } = window.PDFLib;
+    const m = MODELOS[d.modelo];
+    const doc = await PDFDocument.create();
+    doc.setTitle(m.titulo + " - " + d.protocolo);
+    doc.setCreator("Configuração de Agenda (protótipo)");
+    const reg = await doc.embedFont(StandardFonts.Helvetica), neg = await doc.embedFont(StandardFonts.HelveticaBold), mono = await doc.embedFont(StandardFonts.Courier);
+    let logo = null;
+    if (CONFIG.logoDataUrl) {
+      try {
+        const partes = CONFIG.logoDataUrl.split(","), bin = atob(partes[1]), bytes = Uint8Array.from(bin, c => c.charCodeAt(0));
+        logo = /png/i.test(partes[0]) ? await doc.embedPng(bytes) : await doc.embedJpg(bytes);
+      } catch (_) { logo = null; }
+    }
+    const W = 595.28, H = 841.89, M = 42.5, CW = W - 2 * M, LBL = 160, RODAPE = 72;
+    const C = { linha: rgb(0.62, 0.68, 0.66), cinza: rgb(0.93, 0.95, 0.94), verde: rgb(0.88, 0.95, 0.92), preto: rgb(0, 0, 0), suave: rgb(0.3, 0.3, 0.3) };
+    let page = doc.addPage([W, H]), y = H - M;
+    const caixa = (x, topo, w, h, fill) => page.drawRectangle({ x, y: topo - h, width: w, height: h, borderColor: C.linha, borderWidth: 0.7, color: fill });
+    const texto = (s, x, base, o) => { o = o || {}; page.drawText(limpa(s), { x, y: base, font: o.f || reg, size: o.size || 9, color: o.color || C.preto }); };
+
+    // cabeçalho no estilo do formulário oficial: logo | FORMULÁRIO | Código/Revisão/Página, e linha do título
+    const topoCab = y;
+    caixa(M, y, 84, 50);
+    if (logo) {
+      const s = Math.min(72 / logo.width, 38 / logo.height);
+      page.drawImage(logo, { x: M + 42 - logo.width * s / 2, y: y - 25 - logo.height * s / 2, width: logo.width * s, height: logo.height * s });
+    } else texto("LOGO", M + 42 - neg.widthOfTextAtSize("LOGO", 10) / 2, y - 29, { f: neg, size: 10 });
+    caixa(M + 84, y, CW - 84 - 150, 50);
+    texto("FORMULÁRIO", M + 84 + (CW - 84 - 150) / 2 - neg.widthOfTextAtSize("FORMULÁRIO", 11) / 2, y - 29, { f: neg, size: 11 });
+    const xr = W - M - 150;
+    caixa(xr, y, 150, 50);
+    texto("Código:", xr + 8, y - 14, { f: neg, size: 8.5 }); texto(m.codigo, xr + 50, y - 14, { size: 8.5 });
+    texto("Revisão:", xr + 8, y - 27, { f: neg, size: 8.5 }); texto(m.revisao, xr + 50, y - 27, { size: 8.5 });
+    texto("Página:", xr + 8, y - 40, { f: neg, size: 8.5 });
+    y -= 50;
+    caixa(M, y, CW, 26);
+    texto(m.titulo, M + 8, y - 17, { f: neg, size: 11 });
+    const prot = d.protocolo, wp = mono.widthOfTextAtSize(prot, 8.5);
+    texto(prot, W - M - 8 - wp, y - 17, { f: mono, size: 8.5, color: C.suave });
+    y -= 26 + 16;
+
+    const garantir = h => {
+      if (y - h < RODAPE) {
+        page = doc.addPage([W, H]); y = H - M;
+        texto(m.titulo + " - Protocolo " + d.protocolo + " (continuação)", M, y - 8, { size: 8, color: C.suave });
+        y -= 24;
+      }
+    };
+    const barra = (txt, fill, dir) => {
+      garantir(60);
+      caixa(M, y, CW, 20, fill);
+      texto(txt, M + 8, y - 14, { f: neg, size: 9 });
+      if (dir) texto(dir.t, W - M - 8 - neg.widthOfTextAtSize(dir.t, 9), y - 14, { f: neg, size: 9, color: dir.cor });
+      y -= 20;
+    };
+    const linha = (rot, val) => {
+      const lv = quebra(val || "-", reg, 9, CW - LBL - 12), lr = quebra(rot, neg, 8, LBL - 12);
+      const h = Math.max(22, Math.max(lv.length * 11.2, lr.length * 10) + 11);
+      garantir(h);
+      caixa(M, y, LBL, h, C.cinza); caixa(M + LBL, y, CW - LBL, h);
+      lr.forEach((t, i) => texto(t, M + 6, y - 14 - i * 10, { f: neg, size: 8 }));
+      lv.forEach((t, i) => texto(t, M + LBL + 6, y - 14 - i * 11.2, { size: 9 }));
+      y -= h;
+    };
+
+    // 1. TIPO (marca os tipos usados)
+    barra("1. TIPO", C.verde);
+    const tipos = Object.keys(m.tipos), usados = new Set(d.itens.map(i => i.tipo));
+    garantir(60);
+    const hTipo = 20 * Math.ceil(tipos.length / 2) + 10;
+    caixa(M, y, CW, hTipo);
+    tipos.forEach((t, k) => {
+      const cx = M + 14 + (k % 2) * (CW / 2), cy = y - 20 - Math.floor(k / 2) * 20;
+      page.drawRectangle({ x: cx, y: cy - 1, width: 9, height: 9, borderColor: C.preto, borderWidth: 0.8 });
+      if (usados.has(t)) {
+        page.drawLine({ start: { x: cx + 1.5, y: cy + 0.5 }, end: { x: cx + 7.5, y: cy + 6.5 }, thickness: 1.2, color: C.preto });
+        page.drawLine({ start: { x: cx + 1.5, y: cy + 6.5 }, end: { x: cx + 7.5, y: cy + 0.5 }, thickness: 1.2, color: C.preto });
+      }
+      texto(t, cx + 16, cy, { size: 9.5 });
+    });
+    y -= hTipo + 16;
+
+    // 2. DADOS DA SOLICITAÇÃO
+    barra("2. DADOS DA SOLICITAÇÃO", C.verde);
+    linha("Solicitante (profissional)", d.solicitante.nome);
+    linha("Unidade de atendimento", d.solicitante.unidade);
+    linha("E-mail do solicitante", d.solicitante.email);
+    linha("Data da solicitação e hora", d.emitido_em_br);
+    linha("Resumo", d.resumo);
+    d.itens.forEach(it => {
+      y -= 12;
+      const pr = prio(it.prioridade);
+      barra("Configuração " + it.n + " de " + d.itens.length + " - " + it.tipo, C.cinza, { t: "Prioridade: " + it.prioridade, cor: rgb(pr.cor[0], pr.cor[1], pr.cor[2]) });
+      pares(it, m).slice(1).forEach(p => linha(p[0], p[1]));
+    });
+    y -= 18;
+
+    // 3. Data e assinatura
+    barra("3. DATA E ASSINATURA", C.verde);
+    linha("Data", d.data_br);
+    linha("Assinatura do solicitante", d.solicitante.nome + " (aceite eletrônico)");
+    linha("Declaração", "O solicitante declara que as informações acima são verdadeiras.");
+
+    const pgs = doc.getPages();
+    pgs[0].drawText("1/" + pgs.length, { x: xr + 50, y: topoCab - 40, font: reg, size: 8.5, color: C.preto });
+    pgs.forEach((pg, i) => {
+      pg.drawLine({ start: { x: M, y: 58 }, end: { x: W - M, y: 58 }, thickness: 0.6, color: C.linha });
+      quebra(LGPD, reg, 6.5, CW - 70).forEach((t, k) => pg.drawText(t, { x: M, y: 47 - k * 8, font: reg, size: 6.5, color: C.suave }));
+      const num = "Página " + (i + 1) + "/" + pgs.length;
+      pg.drawText(num, { x: W - M - reg.widthOfTextAtSize(num, 7), y: 47, font: reg, size: 7, color: C.suave });
+    });
+    return await doc.save(); // Uint8Array
+  }
+
+  /* ------------------------------ Envio pelo Gmail -------------------------- */
+  // Fluxo: login Google (popup) -> rascunho criado na conta da pessoa, com corpo e PDF anexado -> link para abrir no Gmail.
+  // O escopo gmail.compose permite criar rascunhos; a pessoa revisa e clica em Enviar no próprio Gmail.
+  const b64 = bytes => { let s = ""; for (let i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000)); return btoa(s); };
+  const b64Txt = s => b64(new TextEncoder().encode(s));
+  const em76 = s => s.replace(/(.{76})/g, "$1\r\n");
+  function assuntoMIME(s) {
+    s = s.replace(/[\r\n]+/g, " ");
+    if (/^[\x20-\x7E]*$/.test(s)) return s;
+    const partes = []; let atual = "", bytes = 0;
+    for (const ch of s) { const n = new TextEncoder().encode(ch).length; if (bytes + n > 45) { partes.push(atual); atual = ""; bytes = 0; } atual += ch; bytes += n; }
+    if (atual) partes.push(atual);
+    return partes.map(p => "=?UTF-8?B?" + b64Txt(p) + "?=").join("\r\n ");
+  }
+  function montarMIME(o) {
+    const fr = "=_agenda_" + Math.random().toString(36).slice(2) + Date.now().toString(36);
+    const linhas = ["MIME-Version: 1.0", "To: " + o.para.replace(/[\r\n]+/g, " ")];
+    if (o.cc) linhas.push("Cc: " + o.cc.replace(/[\r\n]+/g, " "));
+    linhas.push("Subject: " + assuntoMIME(o.assunto), 'Content-Type: multipart/mixed; boundary="' + fr + '"', "",
+      "--" + fr, "Content-Type: text/plain; charset=UTF-8", "Content-Transfer-Encoding: base64", "", em76(b64Txt(o.corpo)),
+      "--" + fr, 'Content-Type: application/pdf; name="' + o.nomeAnexo + '"', 'Content-Disposition: attachment; filename="' + o.nomeAnexo + '"',
+      "Content-Transfer-Encoding: base64", "", em76(b64(o.bytes)), "--" + fr + "--", "");
+    return btoa(linhas.join("\r\n")).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  }
+  let promessaGIS = null, tokenGoogle = null;
+  function carregarGIS() {
+    if (window.google && window.google.accounts && window.google.accounts.oauth2) return Promise.resolve();
+    if (!promessaGIS) promessaGIS = new Promise((ok, falha) => {
+      const s = document.createElement("script"); s.src = "https://accounts.google.com/gsi/client"; s.async = true;
+      s.onload = ok; s.onerror = () => { promessaGIS = null; falha(new Error("gis_indisponivel")); }; document.head.appendChild(s);
+    });
+    return promessaGIS;
+  }
+  function pedirToken() {
+    if (tokenGoogle && tokenGoogle.exp > Date.now() + 30000) return Promise.resolve(tokenGoogle.token);
+    return new Promise((ok, falha) => {
+      const cfg = {
+        client_id: CONFIG.googleClientId, scope: "https://www.googleapis.com/auth/gmail.compose", prompt: "select_account",
+        callback: r => {
+          if (r.error) return falha(Object.assign(new Error(r.error_description || r.error), { codigo: r.error }));
+          tokenGoogle = { token: r.access_token, exp: Date.now() + (Number(r.expires_in) || 3000) * 1000 }; ok(tokenGoogle.token);
+        },
+        error_callback: e => falha(Object.assign(new Error(e.message || e.type), { codigo: e.type }))
+      };
+      if (CONFIG.dominioPermitido) cfg.hd = CONFIG.dominioPermitido;
+      window.google.accounts.oauth2.initTokenClient(cfg).requestAccessToken();
+    });
+  }
+  async function gmailFetch(url, token, corpo) {
+    const r = await fetch(url, { method: corpo ? "POST" : "GET", headers: Object.assign({ Authorization: "Bearer " + token }, corpo ? { "Content-Type": "application/json" } : {}), body: corpo ? JSON.stringify(corpo) : undefined });
+    if (!r.ok) throw Object.assign(new Error("http_" + r.status), { codigo: "http_" + r.status });
+    return r.json();
+  }
+  function mensagemErroGmail(e) {
+    const c = e && e.codigo;
+    if (c === "popup_closed") return "Login cancelado. Nenhum rascunho foi criado.";
+    if (c === "popup_failed_to_open") return "O navegador bloqueou a janela de login. Permita pop-ups para este site e tente de novo.";
+    if (c === "access_denied") return "A permissão para criar rascunhos não foi concedida. Sem ela não é possível anexar o PDF.";
+    if (c === "gis_indisponivel") return "Não foi possível carregar o login do Google. Verifique a conexão e tente de novo.";
+    if (c === "http_401") { tokenGoogle = null; return "A sessão do Google expirou. Clique em Enviar pelo Gmail para entrar de novo."; }
+    if (c === "http_403") return "O Google recusou a operação: a API do Gmail pode não estar ativada neste projeto, ou a conta não tem permissão.";
+    return "Não foi possível criar o rascunho no Gmail. O PDF e o texto continuam disponíveis acima para envio manual.";
+  }
+  function statusGmail(html, tipo) { const el = $("#gmail-status"); el.className = "gstatus" + (tipo ? " " + tipo : ""); el.innerHTML = html; el.hidden = !html; }
+  async function enviarGmail() {
+    if (!CONFIG.googleClientId) { toast("Envio pelo Gmail indisponível: falta configurar o login Google."); return; }
+    const btn = document.querySelector('[data-acao="gmail"]'); btn.disabled = true;
+    try {
+      statusGmail("Conectando ao Google…");
+      await carregarGIS();
+      const token = await pedirToken();
+      statusGmail("Criando o rascunho com o PDF anexado…");
+      const d = state.resultado.dados, e = state.resultado.email, bytes = await gerarPDF(d);
+      const raw = montarMIME({ para: e.para, cc: e.cc, assunto: e.assunto, corpo: e.corpo, nomeAnexo: nomeArquivo(d), bytes });
+      const [perfil, rascunho] = await Promise.all([
+        gmailFetch("https://gmail.googleapis.com/gmail/v1/users/me/profile", token).catch(() => null),
+        gmailFetch("https://gmail.googleapis.com/gmail/v1/users/me/drafts", token, { message: { raw } })
+      ]);
+      const conta = perfil && perfil.emailAddress, id = rascunho.message && rascunho.message.id;
+      const url = "https://mail.google.com/mail/u/" + (conta ? encodeURIComponent(conta) : "0") + "/#drafts" + (id ? "?compose=" + encodeURIComponent(id) : "");
+      statusGmail('<div><strong>Rascunho criado' + (conta ? " na conta " + esc(conta) : "") + '.</strong> Ele já tem o texto e o PDF anexado. Revise o destinatário e o assunto e clique em Enviar.</div>' +
+        '<div><a class="btn btn-primario" id="lnk-gmail" href="' + esc(url) + '" target="_blank" rel="noopener">Abrir rascunho no Gmail</a></div>', "ok");
+      try { window.open(url, "_blank", "noopener"); } catch (_) { /* o botão acima cobre o bloqueio de pop-up */ }
+    } catch (err) {
+      if (!["popup_closed", "access_denied"].includes(err && err.codigo)) console.error(err);
+      statusGmail(esc(mensagemErroGmail(err)), "erro");
+    } finally { btn.disabled = false; }
+  }
+
+  /* --------------------------------- Resultado ------------------------------ */
+  const nomeArquivo = d => "Configuracao-Agenda_" + d.modelo + "_" + d.protocolo + ".pdf";
+  function renderResultado() {
+    const r = state.resultado, d = r.dados, e = r.email, box = $("#resultado"), gmailOk = !!CONFIG.googleClientId;
+    box.innerHTML =
+      '<header><h2 id="t-res">Documento gerado</h2><p>' + esc(d.protocolo) + '</p></header>' +
+      '<div class="conteudo">' +
+      '<div class="acoes">' +
+        '<button type="button" class="btn btn-primario" data-acao="pdf">Baixar PDF</button>' +
+        '<button type="button" class="btn btn-suave" data-acao="gmail"' + (gmailOk ? "" : " disabled") + '>Enviar pelo Gmail</button>' +
+        '<button type="button" class="btn btn-ghost" data-acao="copiar-corpo">Copiar corpo do e-mail</button>' +
+        '<button type="button" class="btn btn-ghost" data-acao="copiar-assunto">Copiar assunto</button>' +
+      '</div>' +
+      (gmailOk ? "" : '<p class="nota">O envio pelo Gmail (login Google, rascunho com o PDF já anexado) fica disponível na versão hospedada, depois de configurado o acesso do Google.</p>') +
+      '<div class="gstatus" id="gmail-status" role="status" aria-live="polite" hidden></div>' +
+      '<div class="email" aria-label="Prévia do e-mail">' +
+        '<div class="linha"><span class="rot">Para</span><span class="val">' + esc(e.para) + '</span><button type="button" class="btn btn-ghost btn-sm" data-acao="copiar-para">Copiar</button></div>' +
+        '<div class="linha"><span class="rot">Cc</span><span class="val">' + esc(e.cc) + '</span><span></span></div>' +
+        '<div class="linha"><span class="rot">Assunto</span><span class="val">' + esc(e.assunto) + '</span><span></span></div>' +
+        '<textarea id="corpo-email" readonly aria-label="Corpo do e-mail"></textarea>' +
+      '</div>' +
+      '<p class="nota">Neste protótipo, nada é enviado automaticamente. Na versão integrada, o sistema envia o e-mail com o PDF anexado e cria o card.</p>' +
+      '<details><summary>Dados estruturados (JSON)</summary><pre id="json-saida"></pre></details>' +
+      '<div><button type="button" class="btn" data-acao="nova">Preencher nova solicitação</button></div>' +
+      '</div>';
+    $("#corpo-email").value = e.corpo;
+    $("#json-saida").textContent = JSON.stringify(d, null, 2);
+    box.hidden = false;
+  }
+
+  let tToast;
+  function toast(t) { const el = $("#toast"); el.textContent = t; clearTimeout(tToast); tToast = setTimeout(() => { el.textContent = ""; }, 3500); }
+  async function copiar(texto, el, rotulo) {
+    try { await navigator.clipboard.writeText(texto); toast(rotulo + " copiado."); return; } catch (_) { /* plano B abaixo */ }
+    if (el) {
+      el.focus(); el.select && el.select();
+      let ok = false; try { ok = document.execCommand("copy"); } catch (_) { ok = false; }
+      toast(ok ? rotulo + " copiado." : "Texto selecionado: use Ctrl+C para copiar.");
+    } else toast("Não foi possível copiar automaticamente.");
+  }
+  async function baixarPDF() {
+    const d = state.resultado.dados, nome = nomeArquivo(d);
+    let buf;
+    try { buf = await gerarPDF(d); } catch (err) { console.error(err); toast("Não foi possível gerar o PDF."); return; }
+    if (window.claude && window.claude.use) {
+      const dl = await window.claude.use("downloads");
+      if (!dl) { toast("O download não está disponível nesta visualização."); return; }
+      try { await dl.save({ filename: nome, data: buf }); toast("PDF salvo."); }
+      catch (err) { toast(err && err.code === "declined" ? "Download cancelado." : "Não foi possível salvar o PDF."); }
+    } else {
+      const url = URL.createObjectURL(new Blob([buf], { type: "application/pdf" }));
+      const a = document.createElement("a"); a.href = url; a.download = nome; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 4000);
+    }
+  }
+
+  function gerar() {
+    state.tentou = true;
+    const erros = atualizar();
+    if (erros.length) {
+      state.resultado = null; $("#resultado").hidden = true;
+      const box = $("#resumo-erros"); box.scrollIntoView({ behavior: reduzMov() ? "auto" : "smooth", block: "center" }); box.focus({ preventScroll: true });
+      return;
+    }
+    const dados = montarDados();
+    state.resultado = { dados, email: montarEmail(dados) };
+    renderResultado();
+    const box = $("#resultado"); box.scrollIntoView({ behavior: reduzMov() ? "auto" : "smooth", block: "start" }); box.focus({ preventScroll: true });
+  }
+  function sincronizarCabecalho() {
+    $("#h-solicitante").value = state.h.solicitante; $("#h-unidade").value = state.h.unidade; $("#h-email").value = state.h.email; $("#h-resumo").value = state.h.resumo;
+    $("#aceite").checked = state.aceite;
+    document.querySelectorAll('input[name="modelo"]').forEach(r => { r.checked = r.value === state.modelo; });
+  }
+  function reiniciar() {
+    state.h = { solicitante: "", unidade: "", email: "", resumo: "" }; state.itens = [novoItem()]; state.aceite = false;
+    state.tentou = false; state.tocados = new Set(); state.resultado = null; $("#resultado").hidden = true;
+    sincronizarCabecalho(); renderItens();
+    window.scrollTo({ top: 0, behavior: reduzMov() ? "auto" : "smooth" });
+  }
+  function exemplo() {
+    const dia = n => { const x = new Date(); x.setDate(x.getDate() + n); return isoDe(x); };
+    const a = novoItem(), b = novoItem(), c = novoItem();
+    if (state.modelo === "CASU") {
+      state.h = { solicitante: "Dra. Camila Torres (fictícia)", unidade: "Unidade Centro (exemplo)", email: "camila.torres@instituicao.example", resumo: "Bloqueio por congresso e ajustes de agenda" };
+      Object.assign(a, { tipo: "Bloqueio", prioridade: "Alta", descricao: "Bloquear agenda da manhã para participação em congresso.", data_regencia: dia(7), bloqueio_inicio: dia(7), bloqueio_fim: dia(9), reposicao: "Sem reposição" });
+      Object.assign(b, { tipo: "Ajustes tempo slot", prioridade: "Normal", descricao: "Reduzir a duração das consultas de retorno.", data_regencia: dia(21), novo_slot_min: "20" });
+      Object.assign(c, { tipo: "Alterações permanentes", prioridade: "Baixa", descricao: "Novos dias fixos de atendimento.", data_regencia: dia(45), detalhe: "A partir da data de regência, atendimento apenas às terças e quintas, no período da tarde." });
+    } else {
+      state.h = { solicitante: "Dr. Rafael Menezes (fictício)", unidade: "Imagem - Unidade Centro (exemplo)", email: "rafael.menezes@instituicao.example", resumo: "Troca de horário e bloqueio de equipamento" };
+      Object.assign(a, { tipo: "Trocas", prioridade: "Urgente", descricao: "Trocar o horário do exame do paciente.", data_regencia: dia(2), paciente: "Paciente Exemplo (fictício) - carteirinha 0000", horario_anterior: "08:00", horario_atual: "10:30" });
+      Object.assign(b, { tipo: "Bloqueio", prioridade: "Normal", descricao: "Bloqueio por manutenção do equipamento.", data_regencia: dia(14), detalhe: "Equipamento indisponível das 08:00 às 12:00 para manutenção preventiva." });
+      Object.assign(c, { tipo: "Alterações permanentes", prioridade: "Baixa", descricao: "Novo horário fixo de início da agenda.", data_regencia: dia(40), detalhe: "A agenda passa a iniciar às 07:30 em todas as quartas-feiras." });
+    }
+    state.itens = [a, b, c]; state.aceite = true; state.tentou = false; state.tocados = new Set(); state.resultado = null; $("#resultado").hidden = true;
+    sincronizarCabecalho(); renderItens();
+    toast("Exemplo fictício carregado.");
+  }
+
+  /* --------------------------------- Eventos -------------------------------- */
+  const tocar = id => state.tocados.add(id);
+  const itemDe = t => state.itens.find(i => i.id === t.dataset.item);
+  $("#itens").addEventListener("input", ev => {
+    const t = ev.target, it = itemDe(t); if (!it || t.type === "radio") return;
+    it[t.dataset.campo] = t.value; atualizar();
+  });
+  $("#itens").addEventListener("change", ev => {
+    const t = ev.target, it = itemDe(t); if (!it) return;
+    it[t.dataset.campo] = t.value;
+    const grupo = t.closest(".grupo"); tocar(grupo ? grupo.dataset.field : t.id);
+    if (t.type === "radio") renderItens(t.id); else atualizar();
+  });
+  $("#itens").addEventListener("focusout", ev => {
+    const id = ev.target.id; if (!id || ev.target.type === "radio") return;
+    tocar(id); atualizar();
+  });
+  $("#itens").addEventListener("click", ev => {
+    const b = ev.target.closest("[data-remover]"); if (!b) return;
+    state.itens = state.itens.filter(i => i.id !== b.dataset.remover); renderItens();
+  });
+  $("#btn-add").addEventListener("click", () => {
+    if (state.itens.length >= MAX_ITENS) return;
+    const it = novoItem(); state.itens.push(it); renderItens("f-" + it.id + "-tipo");
+  });
+  [["h-solicitante", "solicitante"], ["h-unidade", "unidade"], ["h-email", "email"], ["h-resumo", "resumo"]].forEach(([id, k]) => {
+    const el = document.getElementById(id);
+    el.addEventListener("input", () => { state.h[k] = el.value; atualizar(); });
+    el.addEventListener("blur", () => { tocar(id); atualizar(); });
+  });
+  $("#aceite").addEventListener("change", ev => { state.aceite = ev.target.checked; tocar("aceite"); atualizar(); });
+  document.querySelectorAll('input[name="modelo"]').forEach(r => r.addEventListener("change", () => {
+    state.modelo = r.value; state.resultado = null; $("#resultado").hidden = true;
+    state.itens.forEach(it => { if (!modeloAtual().tipos[it.tipo]) it.tipo = ""; });
+    renderItens();
+  }));
+  $("#form").addEventListener("submit", ev => { ev.preventDefault(); gerar(); });
+  $("#btn-exemplo").addEventListener("click", exemplo);
+  $("#resumo-erros").addEventListener("click", ev => {
+    const b = ev.target.closest("[data-foco]"); if (!b) return;
+    const el = document.getElementById(b.dataset.foco); if (el) { el.scrollIntoView({ block: "center", behavior: reduzMov() ? "auto" : "smooth" }); el.focus({ preventScroll: true }); }
+  });
+  $("#resultado").addEventListener("click", ev => {
+    const b = ev.target.closest("[data-acao]"); if (!b || !state.resultado) return;
+    const e = state.resultado.email;
+    switch (b.dataset.acao) {
+      case "pdf": baixarPDF(); break;
+      case "gmail": enviarGmail(); break;
+      case "copiar-corpo": copiar(e.corpo, $("#corpo-email"), "Corpo do e-mail"); break;
+      case "copiar-assunto": copiar(e.assunto, null, "Assunto"); break;
+      case "copiar-para": copiar(e.para, null, "Destinatário"); break;
+      case "nova": reiniciar(); break;
+    }
+  });
+
+  renderItens();
+})();
+</script>

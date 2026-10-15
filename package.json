@@ -1,0 +1,6 @@
+{
+  "name": "configuracao-agenda-prototipo",
+  "private": true,
+  "description": "Protótipo: formulário web de configuração de agenda (CASU e Imaginamente) com PDF e rascunho no Gmail",
+  "devDependencies": { "pdf-lib": "1.17.1" }
+}

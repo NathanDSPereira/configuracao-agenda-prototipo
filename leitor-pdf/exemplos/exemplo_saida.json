@@ -1,0 +1,72 @@
+{
+  "status": "OK",
+  "message_id": "<demo-001@exemplo>",
+  "hash_pdf": "4edd052fbc2c4471fb04b0bbea9958c0d858eda3e9091e2b8a06ee7e3eb5030d",
+  "modelo": "CASU",
+  "versao_modelo": "v1",
+  "solicitante": "Dra. Camila Torres (fictícia)",
+  "unidade": "Unidade Centro",
+  "itens": [
+    {
+      "n": 1,
+      "tipo": "Bloqueio",
+      "campos": {
+        "tipo": "Bloqueio",
+        "resumo": "Congresso",
+        "data_regencia": "20/10/2026",
+        "bloqueio_inicio": "20/10/2026",
+        "bloqueio_fim": "22/10/2026",
+        "reposicao": "Sem reposição",
+        "data_reposicao": "",
+        "novo_slot_min": "",
+        "descricao_obs": "Bloquear agenda da manhã"
+      },
+      "chave_natural": "e4732541a1d2cfc07f0b",
+      "acao": "CRIAR_CARD",
+      "duplicado_de": null,
+      "avisos": [],
+      "clickup": {
+        "name": "[CASU] Bloqueio - Dra. Camila Torres (fictícia) - 20/10/2026",
+        "markdown_description": "**Modelo:** CASU\n**Solicitante:** Dra. Camila Torres (fictícia)\n**Unidade:** Unidade Centro\n**Tipo:** Bloqueio\n**Resumo:** Congresso\n**Data de regência:** 20/10/2026\n**Bloqueio:** 20/10/2026 a 22/10/2026\n**Reposição:** Sem reposição\n**Descrição/Observações:** Bloquear agenda da manhã\n\n_Origem: e-mail <demo-001@exemplo>_",
+        "tags": [
+          "casu",
+          "bloqueio"
+        ],
+        "due_date": 1792551540000,
+        "due_date_time": true
+      }
+    },
+    {
+      "n": 2,
+      "tipo": "Ajuste de tempo de slot",
+      "campos": {
+        "tipo": "Ajuste de tempo de slot",
+        "resumo": "Slot menor",
+        "data_regencia": "03/11/2026",
+        "bloqueio_inicio": "",
+        "bloqueio_fim": "",
+        "reposicao": "",
+        "data_reposicao": "",
+        "novo_slot_min": "20",
+        "descricao_obs": ""
+      },
+      "chave_natural": "496181d87ba9e41ee932",
+      "acao": "CRIAR_CARD",
+      "duplicado_de": null,
+      "avisos": [],
+      "clickup": {
+        "name": "[CASU] Ajuste de tempo de slot - Dra. Camila Torres (fictícia) - 03/11/2026",
+        "markdown_description": "**Modelo:** CASU\n**Solicitante:** Dra. Camila Torres (fictícia)\n**Unidade:** Unidade Centro\n**Tipo:** Ajuste de tempo de slot\n**Resumo:** Slot menor\n**Data de regência:** 03/11/2026\n**Novo tempo de slot:** 20 min\n\n_Origem: e-mail <demo-001@exemplo>_",
+        "tags": [
+          "casu",
+          "ajuste-de-tempo-de-slot"
+        ],
+        "due_date": 1793761140000,
+        "due_date_time": true
+      }
+    }
+  ],
+  "erros": [],
+  "avisos": [],
+  "mensagem_para_solicitante": "Recebido: 2 solicitação(ões) registrada(s)."
+}
