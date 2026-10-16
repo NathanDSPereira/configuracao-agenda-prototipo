@@ -5,16 +5,21 @@ Protótipo para substituir o pedido de configuração de agenda enviado por PDF/
 ## Estrutura
 
 ```
-formulario-web/   página única (HTML + JS), sem build; PDF gerado no navegador com pdf-lib
-leitor-pdf/       caminho de contingência: gera o PDF preenchível (AcroForm) e lê/valida PDFs recebidos
-  modelos/  exemplos/
-testes/           testes ponta a ponta (Playwright) e do leitor de PDF
+formulario-web/
+  index.html          estrutura da página (só HTML)
+  css/                tokens.css (cores) · base.css · componentes.css · responsivo.css
+  js/                 config.js · utils.js · estado.js · validacao.js · tela.js
+                      saidas.js · pdf.js · gmail.js · resultado.js · app.js
+leitor-pdf/           caminho de contingência: gera o PDF preenchível (AcroForm) e lê/valida PDFs recebidos
+testes/               testes ponta a ponta (Playwright) e do leitor de PDF
 ```
+
+Os scripts em `js/` são carregados em ordem pelo `index.html` (cada um usa o que os anteriores definem; `app.js` é o último). Cada arquivo começa com um cabeçalho dizendo o que faz, e cada função tem um comentário.
 
 ## Formulário web
 
-Abra `formulario-web/configuracao_agenda.html` no navegador (usa o pdf-lib pelo CDN jsDelivr).
-Ajustes ficam no topo do script (`CONFIG`), ou em `window.CONFIGURACAO_AGENDA` definido antes do script:
+Abra `formulario-web/index.html` no navegador (usa o pdf-lib pelo CDN jsDelivr).
+Ajustes ficam em `js/config.js` (`CONFIG`), ou em `window.CONFIGURACAO_AGENDA` definido antes do script:
 
 | Chave | Uso |
 |---|---|
@@ -22,7 +27,7 @@ Ajustes ficam no topo do script (`CONFIG`), ou em `window.CONFIGURACAO_AGENDA` d
 | `dominioPermitido` | domínio do Google Workspace, como dica no login |
 | `logoDataUrl` | logo PNG/JPEG para o cabeçalho do PDF |
 
-Em `MODELOS` ficam os tipos e campos de cada formulário; `destino`, `codigo` e `revisao` estão com valores de exemplo e devem ser trocados.
+Em `MODELOS` (`js/config.js`) ficam os tipos e campos de cada formulário; `destino`, `codigo` e `revisao` estão com valores de exemplo e devem ser trocados.
 
 ### Envio pelo Gmail
 Login Google (Google Identity Services) → rascunho criado pela API do Gmail com corpo e PDF anexado → abre no Gmail. Requer página hospedada em **https**, API do Gmail ativada, cliente OAuth com a origem autorizada, e o escopo `gmail.compose` (**restrito**: use app "Interno" no Workspace para dispensar a verificação). O link de abertura do rascunho não é documentado pelo Google.

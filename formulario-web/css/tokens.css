@@ -1,0 +1,108 @@
+/* Tokens de design: cores, sombras e fontes. Para mudar a aparência, comece aqui.
+   Modo claro por padrão; escuro automático (prefers-color-scheme) ou forçado com data-theme. */
+
+:root {
+  --bg: #f3f5f4;
+  --surface: #ffffff;
+  --surface-2: #f6f8f7;
+  --ink: #1b2a26;
+  --ink-2: #5a6c65;
+  --ink-3: #8b9b95;
+  --line: #e9eeec;
+  --line-strong: #cfdad5;
+  --accent: #2c7a5f;
+  --accent-hover: #256650;
+  --accent-ink: #ffffff;
+  --accent-soft: #e5f2ec;
+  --danger: #b6402e;
+  --danger-soft: #fdf0ed;
+  --ok: #23724a;
+  --pu: #d4452d;
+  --pu-soft: #fdecea;
+  --pu-ink: #9c2e1b;
+  --pa: #cf820a;
+  --pa-soft: #fdf2dc;
+  --pa-ink: #85550a;
+  --pn: #3f7bc4;
+  --pn-soft: #e7eefa;
+  --pn-ink: #285a99;
+  --pb: #70877d;
+  --pb-soft: #eaf0ed;
+  --pb-ink: #4a5d55;
+  --shadow-sm: 0 1px 2px rgba(27,42,38,.06);
+  --shadow: 0 1px 2px rgba(27,42,38,.03), 0 6px 20px rgba(27,42,38,.04);
+  --shadow-btn: 0 2px 4px rgba(44,122,95,.22), 0 8px 18px rgba(44,122,95,.18);
+  --font: "Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "DM Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121a18;
+    --surface: #19231f;
+    --surface-2: #1d2924;
+    --ink: #e7f0ec;
+    --ink-2: #9fb2ab;
+    --ink-3: #6f8780;
+    --line: #25342f;
+    --line-strong: #34473f;
+    --accent: #5fc9a6;
+    --accent-hover: #7ad7b8;
+    --accent-ink: #082219;
+    --accent-soft: #183128;
+    --danger: #ff9a8a;
+    --danger-soft: #33201c;
+    --ok: #7ad69a;
+    --pu: #ff8470;
+    --pu-soft: #3a1f1b;
+    --pu-ink: #ffb4a6;
+    --pa: #f2b04a;
+    --pa-soft: #362a12;
+    --pa-ink: #f5cc85;
+    --pn: #7fb0f0;
+    --pn-soft: #172a42;
+    --pn-ink: #a9c9f5;
+    --pb: #98ada5;
+    --pb-soft: #222f2b;
+    --pb-ink: #b9c9c2;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.4);
+    --shadow: 0 1px 2px rgba(0,0,0,.25), 0 6px 20px rgba(0,0,0,.2);
+    --shadow-btn: 0 2px 4px rgba(0,0,0,.3), 0 8px 18px rgba(0,0,0,.25);
+    color-scheme: dark;
+  }
+
+}
+
+:root[data-theme="dark"] {
+  --bg: #121a18;
+  --surface: #19231f;
+  --surface-2: #1d2924;
+  --ink: #e7f0ec;
+  --ink-2: #9fb2ab;
+  --ink-3: #6f8780;
+  --line: #25342f;
+  --line-strong: #34473f;
+  --accent: #5fc9a6;
+  --accent-hover: #7ad7b8;
+  --accent-ink: #082219;
+  --accent-soft: #183128;
+  --danger: #ff9a8a;
+  --danger-soft: #33201c;
+  --ok: #7ad69a;
+  --pu: #ff8470;
+  --pu-soft: #3a1f1b;
+  --pu-ink: #ffb4a6;
+  --pa: #f2b04a;
+  --pa-soft: #362a12;
+  --pa-ink: #f5cc85;
+  --pn: #7fb0f0;
+  --pn-soft: #172a42;
+  --pn-ink: #a9c9f5;
+  --pb: #98ada5;
+  --pb-soft: #222f2b;
+  --pb-ink: #b9c9c2;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.4);
+  --shadow: 0 1px 2px rgba(0,0,0,.25), 0 6px 20px rgba(0,0,0,.2);
+  --shadow-btn: 0 2px 4px rgba(0,0,0,.3), 0 8px 18px rgba(0,0,0,.25);
+  color-scheme: dark;
+}

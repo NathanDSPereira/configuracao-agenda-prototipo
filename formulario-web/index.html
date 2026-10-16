@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Configuração de Agenda</title>
+
+  <!-- Fontes (opcional: sem internet, o navegador usa a fonte do sistema) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Figtree:wght@400;500;600;700&display=swap">
+
+  <!-- Estilos: a ordem importa (tokens -> base -> componentes -> responsivo) -->
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/componentes.css">
+  <link rel="stylesheet" href="css/responsivo.css">
+</head>
+<body>
+
+  <!-- Conteúdo: três seções (1 Dados, 2 Configurações, 3 Aceite) e, depois de finalizar, o Resultado -->
+  <div class="wrap">
+    <header class="topo">
+      <div>
+        <span class="selo">Protótipo</span>
+        <h1>Configuração de agenda</h1>
+        <p class="sub">Preencha os campos obrigatórios. Ao finalizar, o PDF e o texto do e-mail são gerados para você.</p>
+      </div>
+      <button type="button" class="btn btn-ghost btn-sm" id="btn-exemplo">Carregar exemplo fictício</button>
+    </header>
+
+    <!-- novalidate: a validação é feita por js/validacao.js, com mensagens próprias -->
+      <form id="form" novalidate>
+      <fieldset class="abas" aria-label="Modelo do formulário">
+        <label><input type="radio" name="modelo" value="CASU" checked><span>CASU</span></label>
+        <label><input type="radio" name="modelo" value="IMAGINAMENTE"><span>Imaginamente</span></label>
+      </fieldset>
+
+      <section class="card" aria-labelledby="t1">
+        <div class="card-tit"><span class="num" aria-hidden="true">1</span><h2 id="t1">Dados da solicitação</h2></div>
+        <div class="grade">
+          <div class="campo">
+            <label for="h-solicitante">Solicitante (profissional) <span class="req" aria-hidden="true">*</span></label>
+            <input type="text" id="h-solicitante" autocomplete="name" aria-describedby="e-h-solicitante" aria-required="true">
+            <p class="err" id="e-h-solicitante"></p>
+          </div>
+          <div class="campo">
+            <label for="h-unidade">Unidade de atendimento <span class="req" aria-hidden="true">*</span></label>
+            <input type="text" id="h-unidade" aria-describedby="e-h-unidade" aria-required="true">
+            <p class="err" id="e-h-unidade"></p>
+          </div>
+          <div class="campo cheia">
+            <label for="h-email">E-mail do solicitante <span class="req" aria-hidden="true">*</span></label>
+            <input type="email" id="h-email" autocomplete="email" aria-describedby="e-h-email" aria-required="true">
+            <p class="err" id="e-h-email"></p>
+          </div>
+          <div class="campo cheia">
+            <label for="h-resumo">Resumo <span class="req" aria-hidden="true">*</span></label>
+            <input type="text" id="h-resumo" maxlength="120" aria-describedby="e-h-resumo" aria-required="true">
+            <p class="err" id="e-h-resumo"></p>
+            <p class="ajuda">Data e hora da solicitação são registradas automaticamente ao finalizar.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="t2">
+        <div class="card-tit"><span class="num" aria-hidden="true">2</span><h2 id="t2">Configurações</h2></div>
+        <p class="dica">Cada configuração tem um único tipo e sua própria prioridade. Para mais de uma alteração, adicione outra.</p>
+        <div id="itens"></div>
+        <button type="button" class="btn add" id="btn-add"></button>
+      </section>
+
+      <section class="card" aria-labelledby="t3">
+        <div class="card-tit"><span class="num" aria-hidden="true">3</span><h2 id="t3">Aceite</h2></div>
+        <div class="aceite">
+          <input type="checkbox" id="aceite" aria-describedby="e-aceite">
+          <label for="aceite">Declaro que as informações acima são verdadeiras e estou ciente de que este documento é classificado conforme a Lei nº 13.709/2018 (LGPD). <span class="req" aria-hidden="true">*</span></label>
+        </div>
+        <p class="err" id="e-aceite" style="margin-left:36px"></p>
+      </section>
+
+      <div class="resumo-erros" id="resumo-erros" tabindex="-1" hidden></div>
+
+      <div class="barra">
+        <p class="contador" id="contador" aria-live="polite"></p>
+        <button type="submit" class="btn btn-primario" id="btn-gerar">Finalizar e gerar documento</button>
+      </div>
+    </form>
+
+    <section class="card resultado" id="resultado" tabindex="-1" hidden aria-labelledby="t-res"></section>
+
+    <p class="rodape">Protótipo de demonstração. Os dados permanecem neste navegador. Nomes e e-mails de exemplo são fictícios.</p>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Biblioteca que desenha o PDF no navegador -->
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+  <!-- Código da página. A ordem importa: cada arquivo usa o que os anteriores definem.
+       Para configurar o Gmail/logo sem editar js/config.js, defina window.CONFIGURACAO_AGENDA antes destas linhas. -->
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/estado.js"></script>
+  <script src="js/validacao.js"></script>
+  <script src="js/tela.js"></script>
+  <script src="js/saidas.js"></script>
+  <script src="js/pdf.js"></script>
+  <script src="js/gmail.js"></script>
+  <script src="js/resultado.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

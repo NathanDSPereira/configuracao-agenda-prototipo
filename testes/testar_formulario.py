@@ -7,7 +7,7 @@ from pypdf import PdfReader
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PDFLIB = os.environ.get("PDFLIB_JS", os.path.join(RAIZ, "node_modules/pdf-lib/dist/pdf-lib.min.js"))
-URL = "file://" + os.path.join(RAIZ, "formulario-web", "configuracao_agenda.html")
+URL = "file://" + os.path.join(RAIZ, "formulario-web", "index.html")
 OUT = os.path.join(RAIZ, "testes", "saida")
 os.makedirs(OUT, exist_ok=True)
 falhas, erros_js = [], []
